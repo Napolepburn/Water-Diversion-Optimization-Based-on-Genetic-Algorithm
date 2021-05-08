@@ -1,0 +1,61 @@
+get_data模块：输出全局的 水资源系统 输入数据；全局的 水文年份序列；
+
+
+
+初始水单元模块：
+def initial_water_balance(input, node, total_inflow, engineering_param, lim_irr_storage_disc_rate=1.0, 
+				lim_ind_lif_storage_disc_rate=1.0, irr_rate = 0.6, 
+                              			ind_lif_rate = 0.7, diversion_storage=3370, storage=0)
+模块输入：
+input是一个array；node是单元在系统中的节点顺序编号；total_inflow是 多年平均来水量；engineering_param 是工程参数数组array；
+lim_irr_storage_disc_rate和lim_ind_lif_storage_disc_rate分别是灌溉和生活工业限制库容折扣率（方便调整限制库容）；
+irr_rate和ind_lif_rate分别是最低灌溉和生活工业供水保证率要求；
+diversion_storage是取水水位对应库容；storage是库容，初始设为0即可。
+模块输出：
+日期，损失水量，生态需水量，净来水量，水库灌溉需水，水库生活工业需水，灌溉供水，生活工业供水，可引水量，外来水源，是否汛期
+
+
+
+受水单元模块：
+def reservior_water_balance(input, engineering_param, charging_line, node, total_inflow, design_diversion, 
+                            available_diversion, charging_line_disc_rate=1.0, lim_irr_storage_disc_rate=1.0, lim_ind_lif_storage_disc_rate=1.0, 
+                                into_reserv_or_not =1, eco_demand_vary = 0, other_modul_water_or_not = 0, 
+                                    other_modul_water_design = 3, irr_rate = 0.6, ind_lif_rate = 0.8, div_loss_rate=0.95, storage=0): 
+模块输入：
+input是一个array；engineering_param 是工程参数数组array；charging_line是充库线数组array；node是单元在系统中的节点顺序编号；
+total_inflow是 多年平均来水量；design_diversion是设计引水量；available_diversion是可引水量；
+charging_line_disc_rate是充库线折扣率（方便调整）；
+lim_irr_storage_disc_rate和lim_ind_lif_storage_disc_rate分别是灌溉和生活工业限制库容折扣率（方便调整限制库容）；
+into_reserv_or_not是引水入库与否；eco_demand_vary是生态需水是否有汛期变化；
+other_modul_water_or_not是是否有外来调节调度水源；other_modul_water_design是设计的外来调节调度引水量；
+irr_rate和ind_lif_rate分别是最低灌溉和生活工业供水保证率要求；
+div_loss_rate是引水损耗率；
+storage是库容，初始设为0即可。
+模块输出：
+日期，损失水量，生态需水量，净来水量，水库灌溉需水，水库生活工业需水，灌溉供水，生活工业供水，理论引水量，
+实际引水量（未计损耗），外来调节调度引水量，当前库容，外来水源，弃水量
+
+
+
+联合调度模块：
+def joint_dispatch_balance(input, engineering_param, charging_line, design_diversion, into_reserv_or_not, eco_demand_vary, other_modul_water_or_not, 
+                           other_modul_water_design, charging_line_disc_rate, lim_irr_storage_disc_rate, lim_ind_lif_storage_disc_rate,
+                           diversion_storage=3370, irr_rate1=0.6, ind_lif_rate1=0.7, irr_rate2=0.6, ind_lif_rate2=0.8, div_loss_rate=0.95)
+模块输入：
+input是一个array（全部数据）；engineering_param 是工程参数数组array；charging_line是充库线数组array；
+design_diversion是设计引水量（数组，包含各单元引水）；into_reserv_or_not是引水入库与否；eco_demand_vary是生态需水是否有汛期变化；
+other_modul_water_or_not是是否有外来调节调度水源；other_modul_water_design是设计的外来调节调度引水量；
+charging_line_disc_rate是充库线折扣率（方便调整）（数组，包含各单元折扣率）；
+lim_irr_storage_disc_rate和lim_ind_lif_storage_disc_rate分别是灌溉和生活工业限制库容折扣率（方便调整限制库容）（数组，包含各单元折扣率）；
+diversion_storage是初始水单元取水水位对应库容；
+irr_rate1和ind_lif_rate1分别是 初始水单元最低灌溉和生活工业供水保证率要求；
+irr_rate2和ind_lif_rate2分别是 受水单元最低灌溉和生活工业供水保证率要求；
+div_loss_rate是引水损耗率（数组）；
+
+
+
+
+
+
+
+
